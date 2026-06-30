@@ -93,7 +93,7 @@ const LoginForm = ({ role, title, subtitle }) => {
             text-white font-semibold shadow-lg hover:shadow-xl
               hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
-              {loading && <Loader2Icon className="animate-spin h-4 w-4 mr-2"/>}
+              {loading && <Loader2Icon className="animate-spin h-4 w-4 mr-2" />}
               Sign In
             </button>
           </form>
