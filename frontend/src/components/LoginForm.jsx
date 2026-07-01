@@ -89,7 +89,8 @@ const LoginForm = ({ role, title, subtitle }) => {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600
+              disabled={loading}
+              className="w-full py-3 rounded-xl bg-linear-to-r from-blue-500 to-blue-600
             text-white font-semibold shadow-lg hover:shadow-xl
               hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
