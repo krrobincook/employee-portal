@@ -26,7 +26,7 @@ const Sidebar = () => {
     setMobileOpen(false);
   }, [pathname]);
 
-  const role = "" || "EMPLOYEE";
+  const role = "ADMIN" || "EMPLOYEE";
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
@@ -45,13 +45,14 @@ const Sidebar = () => {
     <>
       <div className="px-5 pt-6 pb-5 border-b border-white/6">
         <div className="flex items-center gap-3">
-          <User className="text-white size-9 shrink-0" />
+          <User className="text-white size-10 shrink-0" />
 
           <div>
-            <p className="text-lg font-bold text-white leading-none">
+            <p className="text-2xl font-bold text-white leading-none">
               Employee
             </p>
-            <p className="text-sm text-slate-300">Management System</p>
+            
+            <p className="text-2xl text-slate-300">Management System</p>
           </div>
         </div>
         <button
@@ -127,9 +128,9 @@ const Sidebar = () => {
       <div className="p-3 mt-auto border-t border-white/6">
         <button
           onClick={handleLogout}
-          className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
+          className="group flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-100 transition-all duration-200 hover:text-red-400"
         >
-          <LogOutIcon className="w-[17px] h-[17px] text-slate-400 group-hover:text-red-400" />
+          <LogOutIcon className="w-[17px] h-[17px] text-slate-200 group-hover:text-red-400" />
 
           <span className="flex-1 text-left">Logout</span>
         </button>
@@ -155,12 +156,12 @@ const Sidebar = () => {
         />
       )}
 
-      <aside className="hidden lg:flex flex-col h-full w-92 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white shrink-0 border-r border-white/5">
+      <aside className="hidden lg:flex flex-col h-full w-92 bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 text-white shrink-0 border-r border-white/5">
         {sidebarContent}
       </aside>
 
       <aside
-        className={`lg:hidden fixed inset-y-0 left-0 w-72 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-white z-50 flex flex-col transform transition-transform duration-300 ${
+        className={`lg:hidden fixed inset-y-0 left-0 w-72 bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 text-white z-50 flex flex-col transform transition-transform duration-300 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
