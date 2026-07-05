@@ -5,6 +5,7 @@ import Loading from "../components/Loading";
 import { Plus } from "lucide-react";
 import PayslipList from "../components/payslip/PayslipList";
 import GeneratePaySlipForm from "../components/payslip/GeneratePaySlipForm";
+
 const Payslips = () => {
   const [payslips, setPayslips] = useState([]);
   const [loading, setLoading] = useState(true);
