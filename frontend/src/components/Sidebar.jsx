@@ -26,7 +26,7 @@ const Sidebar = () => {
     setMobileOpen(false);
   }, [pathname]);
 
-  const role = "" || "EMPLOYEE";
+  const role = "ADMIN" || "EMPLOYEE";
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutGridIcon },
@@ -88,7 +88,7 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation List */}
-      <div className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
+      <div className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
 
@@ -107,7 +107,7 @@ const Sidebar = () => {
               )}
 
               <item.icon
-                className={`w-[18px] h-[38px] shrink-0 ${
+                className={`w-4.5 h-9.5 shrink-0 ${
                   isActive
                     ? "text-indigo-300"
                     : "text-slate-400 group-hover:text-slate-300"
@@ -125,12 +125,12 @@ const Sidebar = () => {
       </div>
 
       {/* Logout */}
-      <div className="p-3 mt-auto border-t border-white/6">
+      <div className="mt-auto border-t border-slate-700/90 p-4">
         <button
           onClick={handleLogout}
           className="group flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-100 transition-all duration-200 hover:text-red-400"
         >
-          <LogOutIcon className="w-[17px] h-[17px] text-slate-200 group-hover:text-red-400" />
+          <LogOutIcon className="w-4.25 h-4.25 text-slate-200 group-hover:text-red-400" />
 
           <span className="flex-1 text-left">Logout</span>
         </button>

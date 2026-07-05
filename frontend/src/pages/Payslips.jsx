@@ -33,7 +33,7 @@ const Payslips = () => {
     <div className="animate-fade-in">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="page-title">Payslips</h1>
+          <h1 className="text-3xl font-bold">Payslips</h1>
           <p className="page-subtitle">
             {isAdmin
               ? "Generate and manage employee payslips"
