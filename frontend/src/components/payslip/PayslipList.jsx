@@ -1,8 +1,10 @@
 import React from "react";
 import { Download } from "lucide-react";
 import { format } from "date-fns";
-
+import { useNavigate } from "react-router-dom";
+import PrintPayslip from "../../pages/PrintPayslip";
 const PayslipList = ({payslips, isAdmin }) => {
+  const navigate = useNavigate();
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
@@ -54,7 +56,7 @@ const PayslipList = ({payslips, isAdmin }) => {
                   </td>
 
                   <td className="px-6 py-5 text-center">
-                    <button className="inline-flex items-center gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-indigo-600 transition hover:bg-indigo-100">
+                    <button onClick={() => navigate(`/print/payslips/${payslip._id}`)} className="inline-flex items-center gap-2 rounded-lg bg-indigo-50 px-3 py-2 text-indigo-600 transition hover:bg-indigo-100">
                       <Download className="h-4 w-4" />
                       PDF
                     </button>
