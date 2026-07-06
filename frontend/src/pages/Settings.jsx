@@ -6,11 +6,12 @@ import { Lock } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import ProfileForm from "../components/ProfileForm";
 import ChangePasswordModal from "../components/ChangePasswordModal";
+import { dummyEmployeeData } from "../assets/assets";
+
 const Settings = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-
   const fetchProfile = async () => {
     setLoading(true);
     setProfile(dummyProfileData);
