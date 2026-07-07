@@ -5,10 +5,13 @@ import {
   getEmployees,
   updateEmployees,
 } from "../controllers/employeeController";
+import { protect, protectAdmin } from "../middleware/auth";
 
 const employeesRouter = Router();
 
-employeesRouter.get("/", getEmployees);
-employeesRouter.post("/", createEmployees);
-employeesRouter.put("/:id", updateEmployees);
-employeesRouter.delete("/:id", deleteEmployees);
+employeesRouter.get("/", protect, protectAdmin ,getEmployees);
+employeesRouter.post("/", protect ,protectAdmin ,createEmployees);
+employeesRouter.put("/:id", protect ,protectAdmin ,updateEmployees);
+employeesRouter.delete("/:id", protect ,protectAdmin ,deleteEmployees);
+
+export default employeesRouter;
