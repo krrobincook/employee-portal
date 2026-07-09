@@ -1,6 +1,7 @@
-import Employee from "../models/Employee";
+import Employee from "../models/Employee.js";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import User from "../models/User";
+import User from "../models/User.js";
 // get employees
 // GET /api/employees
 export const getEmployees = async (req, res) => {
