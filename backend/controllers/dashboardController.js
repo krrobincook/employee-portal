@@ -1,7 +1,7 @@
 import Employee from "../models/Employee.js";
 import Attendance from "../models/Attendance.js";
 import LeaveApplication from "../models/LeaveApplication.js";
-import { DEPARTMENTS } from "../constants/department";
+import { DEPARTMENTS } from "../constants/department.js";
 import Payslip from "../models/Payslip.js";
 
 // Get dashboard for employee and admin
