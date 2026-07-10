@@ -65,6 +65,6 @@ export const changePassword = async (req, res) => {
     const hashed = bcrypt.hash(newPassword, 10);
     await User.findByIdAndUpdate(session.userId, { password: hashed });
   } catch (error) {
-    return res.status(500).json({ error: "Failded to change the password" });
+    return res.status(500).json({ error: "Failed to change the password" });
   }
 };
