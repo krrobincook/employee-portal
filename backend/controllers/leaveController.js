@@ -1,6 +1,6 @@
 import Employee from "../models/Employee.js";
 import LeaveApplication from "../models/LeaveApplication.js";
-
+import { inngest } from "../inngest/index.js";
 // POST /api/leaves
 export const createLeave = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ export const createLeave = async (req, res) => {
     if (!employee) return res.status(404).json({ error: "Employee not found" });
     if (employee.isDeleted) {
       return res.status(403).json({
-        error: "Your account is deactivated. you cannot apply for leave",
+        error: "Your account is deactivated. You cannot apply for leave",
       });
     }
 
@@ -26,7 +26,7 @@ export const createLeave = async (req, res) => {
         .json({ error: "End date cannot be before start date" });
     }
 
-    const leave = await LeaveApplication.crete({
+    const leave = await LeaveApplication.create({
       employeeId: employee._id,
       type,
       startDate: new Date(startDate),
@@ -34,6 +34,14 @@ export const createLeave = async (req, res) => {
       reason,
       status: "PENDING",
     });
+
+    await inngest.send({
+      name: "leave/pending",
+      data: {
+        leaveApplicationId: leave._id,
+      }
+    })
+
     return res.json({ success: true, data: leave });
   } catch (error) {
     return res.status(500).json({ error: "Failed" });

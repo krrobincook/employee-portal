@@ -133,7 +133,7 @@ export const updateEmployees = async (req, res) => {
   }
 };
 
-// detele employee
+// delete employee
 // DELETE /api/employees/:id
 export const deleteEmployees = async (req, res) => {
   try {
