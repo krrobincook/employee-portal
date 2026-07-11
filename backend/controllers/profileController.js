@@ -32,8 +32,9 @@ export const updateProfile = async (req, res) => {
           error: "Your account is deactivated. you cannot update your profile",
         });
     }
-    await Employee.findByIdAndDelete(employee._id, {
+    await Employee.findByIdAndUpdate(employee._id, {
       bio: req.body.bio,
+      position: req.body.position,
     });
     return res.json({ success: true });
   } catch (error) {
