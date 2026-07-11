@@ -102,7 +102,7 @@ const attendanceReminderCron = inngest.createFunction(
         ("get-active-employees", async() => {
             const employees = await Employee.find({
                 isDeleted: false,
-                employeeStatus: "ACTIVE",
+                employmentStatus: "ACTIVE",
             }).lean();
             return employees.map((e)=>({
                 _id: e._id.toString(),
@@ -132,8 +132,8 @@ const attendanceReminderCron = inngest.createFunction(
         })
 
         // Step 5: Filter absent employees (not on leave & not checked in)
-        const absentEmployees = activeEmployees.filter((e)=>{
-            !onLeaveIds.includes(e._id) && !checkedInIds.includes(e._id)
+        const absentEmployees = activeEmployees.filter((e) => {
+            return !onLeaveIds.includes(e._id) && !checkedInIds.includes(e._id)
         })
 
         // Step 6: Send reminder emails to absent employees
@@ -159,6 +159,8 @@ const attendanceReminderCron = inngest.createFunction(
                         `
                     })
                 })
+                
+                await Promise.all(emailPromises)
             })
         }
         return {totalActive: activeEmployees.length, onLeave: onLeaveIds.length, 
