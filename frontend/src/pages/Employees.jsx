@@ -10,7 +10,7 @@ import api from "../api/axios";
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedDept, setSelectedDept] = useState("");
   const [editEmployee, setEditEmployee] = useState(null);
@@ -18,6 +18,7 @@ const Employees = () => {
 
   const fetchEmployees = useCallback(async () => {
     try {
+      setLoading(true)
       const url = selectedDept ? `/employees?department=${selectedDept}` : `/employees`
       const res = await api.get(url)
       setEmployees(res.data)

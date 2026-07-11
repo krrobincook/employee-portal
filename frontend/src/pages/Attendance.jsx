@@ -11,6 +11,7 @@ const Attendance = () => {
   const [isDeleted, setIsDeleted] = useState(false)
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true)
       const res = await api.get("/attendance")
       const json = res.data
       setHistory(json.data || [])
