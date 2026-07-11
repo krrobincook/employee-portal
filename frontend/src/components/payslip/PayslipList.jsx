@@ -1,6 +1,7 @@
 import { Download } from "lucide-react";
-import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const PayslipList = ({payslips, isAdmin }) => {
   const navigate = useNavigate();
   return (
@@ -29,12 +30,14 @@ const PayslipList = ({payslips, isAdmin }) => {
                 >
                   {isAdmin && (
                     <td className="px-6 py-5 font-medium text-slate-900">
-                      {payslip.employee.firstName} {payslip.employee.lastName}
+                      {payslip.employee
+                        ? `${payslip.employee.firstName} ${payslip.employee.lastName}`
+                        : "Deleted Employee"}
                     </td>
                   )}
 
                   <td className="px-6 py-5 text-slate-700">
-                    {format(new Date(payslip.month), "MMMM yyyy")}
+                    {MONTHS[(payslip.month ?? 1) - 1]} {payslip.year}
                   </td>
 
                   <td className="px-6 py-5">
