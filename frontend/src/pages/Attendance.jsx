@@ -1,21 +1,28 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import AttendanceStats from "../components/attendance/AttendanceStats";
 import CheckInButton from "../components/attendance/CheckInButton";
-import { dummyAttendanceData } from "../assets/assets";
 import AttendanceHistory from "../components/attendance/AttendanceHistory";
+import api from "../api/axios";
+import toast from "react-hot-toast";
 const Attendance = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [isDeleted, setIsDeleted] = useState(false)
   const fetchData = useCallback(async () => {
-    setLoading(true);
-    setHistory(dummyAttendanceData);
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  }, []);
+    try {
+      const res = await api.get("/attendance")
+      const json = res.data
+      setHistory(json.data || [])
+      if(json.employee?.isDeleted) setIsDeleted(true)
+    } catch (error) {
+      toast.error(error.response?.data?.error || error?.message)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
+    }
+  },[]);
 
   useEffect(() => {
     fetchData();
@@ -49,7 +56,7 @@ const Attendance = () => {
       </div>
       {/* Floating Check In Button */}
       <div className="fixed bottom-8 right-8">
-        <CheckInButton todayRecord={todayRecord} fetchData={fetchData} />
+        <CheckInButton todayRecord={todayRecord} onAction={fetchData} />
       </div>
     </div>
   );

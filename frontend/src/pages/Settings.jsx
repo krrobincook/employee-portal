@@ -1,23 +1,29 @@
-import React from "react";
 import { useState, useEffect } from "react";
-import { dummyProfileData } from "../assets/assets";
 import Loading from "../components/Loading";
 import { Lock } from "lucide-react";
 import { ChevronRight } from "lucide-react";
 import ProfileForm from "../components/ProfileForm";
 import ChangePasswordModal from "../components/ChangePasswordModal";
-import { dummyEmployeeData } from "../assets/assets";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
+import api from "../api/axios";
 
 const Settings = () => {
+  const {user} = useAuth()
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const fetchProfile = async () => {
-    setLoading(true);
-    setProfile(dummyProfileData);
-    setTimeout(() => {
+    try {
+      setLoading(true);
+      const res = await api.get("/profile");
+      const profile = res.data;
+      if(profile) setProfile(profile);
+    } catch (error) {
+      toast.error(error.response?.data?.error || error?.message)
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   useEffect(() => {

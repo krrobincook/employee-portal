@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { CalendarDays, FileText, Send, X } from "lucide-react";
-import Loading from "../Loading";
+import { useState } from "react";
+import { CalendarDays, FileText, Send, X } from "lucide-react"; 
+import { Loader2 } from "lucide-react"; 
+import toast from "react-hot-toast";
+import api from "../../api/axios";
 const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: "SICK",
-    fromDate: "",
-    toDate: "",
+    startDate: "",
+    endDate: "",
     reason: "",
   });
   const today = new Date();
@@ -23,12 +25,18 @@ const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-      onSuccess?.();
-      onClose();
-    }, 1000);
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData.entries())
+    try {
+      await api.post("/leave", data)
+      toast.success("Leave applied successfully")
+      onSuccess?.()
+      onClose()
+    } catch (error) {
+      toast.error(error.response?.data?.error || error?.message)
+    } finally {
+      setLoading(false)
+    }
   };
 
 
@@ -94,9 +102,9 @@ const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
 
                 <input
                   type="date"
-                  name="fromDate"
+                  name="startDate"
                   min={minDate}
-                  value={formData.fromDate}
+                  value={formData.startDate}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                 />
@@ -107,9 +115,9 @@ const ApplyLeaveModal = ({ open, onClose, onSuccess }) => {
 
                 <input
                   type="date"
-                  name="toDate"
-                  min={formData.fromDate || minDate}
-                  value={formData.toDate}
+                  name="endDate"
+                  min={formData.startDate || minDate}
+                  value={formData.endDate}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                 />

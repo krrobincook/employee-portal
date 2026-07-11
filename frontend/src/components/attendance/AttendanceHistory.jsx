@@ -1,4 +1,3 @@
-import React from "react";
 import { format } from "date-fns";
 import { getWorkingHoursDisplay } from "../../assets/assets";
 const AttendanceHistory = ({ history }) => {
@@ -11,12 +10,12 @@ const AttendanceHistory = ({ history }) => {
         <table className="w-full table-auto">
           <thead>
             <tr>
-              <th className="px-6 py-4">Date</th>
-              <th className="px-6 py-4">Check In</th>
-              <th className="px-6 py-4">Check Out</th>
-              <th className="px-6 py-4">Working Hours</th>
-              <th className="px-6 py-4">Day Type</th>
-              <th className="px-6 py-4">Status</th>
+              <th className="px-6 py-4 text-left">Date</th>
+              <th className="px-6 py-4 text-left">Check In</th>
+              <th className="px-6 py-4 text-left">Check Out</th>
+              <th className="px-6 py-4 text-left">Working Hours</th>
+              <th className="px-6 py-4 text-left">Day Type</th>
+              <th className="px-6 py-4 text-left">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -43,7 +42,7 @@ const AttendanceHistory = ({ history }) => {
                   </td>
 
                   <td className="px-6 py-5 text-slate-600">
-                    {getWorkingHoursDisplay(record.workingHours)}
+                    {getWorkingHoursDisplay(record)}
                   </td>
 
                   <td className="px-6 py-5">

@@ -3,7 +3,6 @@ import { Building2Icon, UsersIcon } from "lucide-react";
 import { CalendarIcon, FileTextIcon } from "lucide-react";
 import { ArrowRightIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { dummyAdminDashboardData } from "../assets/assets";
 const AdminDashboard = ({ data }) => {
   const stats = [
     {

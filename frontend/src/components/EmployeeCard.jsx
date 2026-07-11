@@ -1,14 +1,24 @@
-import React from "react";
 import { Pencil, Trash2 } from "lucide-react";
+import api from "../api/axios";
+import toast from "react-hot-toast";
 
 const EmployeeCard = ({ employee, onDelete, onEdit }) => {
   const initials = `${employee.firstName[0]}${employee.lastName[0]}`;
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (employee.isDeleted) {
+      return toast.error("Employee already deleted");
+    }
+    
     if (!window.confirm("Are you sure you want to delete this employee?"))
       return;
-
-    onDelete(employee.id);
+    try {
+      await api.delete(`/employees/${employee.id}`)
+      onDelete()
+      toast.success("Employee deleted successfully")
+    } catch (error) {
+      toast.error(error.response?.data?.error || error?.message)
+    }
   };
 
   return (
@@ -45,8 +55,9 @@ const EmployeeCard = ({ employee, onDelete, onEdit }) => {
 
       {/* Bottom Section */}
       <div className="border-t border-slate-100 bg-white p-6">
-        <h3 className="truncate text-lg font-semibold text-slate-900">
+        <h3 className="truncate text-lg font-semibold text-slate-900 flex items-center gap-2">
           {employee.firstName} {employee.lastName}
+          {employee.isDeleted && <span className="text-sm font-bold text-red-500">(Deleted)</span>}
         </h3>
 
         <p className="mt-1 text-base text-slate-500">

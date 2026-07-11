@@ -1,5 +1,6 @@
 import { Save, User } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
+import api from "../api/axios";
 
 const ProfileForm = ({ initialData, onSuccess }) => {
   const [loading, setLoading] = useState(false);
@@ -22,18 +23,23 @@ const ProfileForm = ({ initialData, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setError("");
     setMessage("");
-
-    // API Call
-
-    setTimeout(() => {
-      setLoading(false);
-      setMessage("Profile updated successfully.");
+    const formData = new FormData(e.currentTarget);
+    try {
+      await api.post("/profile", formData);
+      setMessage("Profile updated successfully");
       onSuccess?.();
-    }, 1000);
+    } catch (error) {
+      setError(error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        setMessage("");
+        setError("");
+      }, 3000);
+    }
   };
 
   return (
@@ -95,11 +101,9 @@ const ProfileForm = ({ initialData, onSuccess }) => {
 
         <input
           type="text"
-          name="position"
           value={formData.position}
-          onChange={handleChange}
-          placeholder="Enter position"
-          className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-md placeholder:text-slate-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+          readOnly
+          className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-md text-slate-500 cursor-not-allowed"
         />
       </div>
 

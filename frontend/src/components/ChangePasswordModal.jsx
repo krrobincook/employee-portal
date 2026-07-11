@@ -1,12 +1,29 @@
-import { LockIcon } from 'lucide-react'
-import React, {useState} from 'react'
+import { LockIcon, Loader2 } from 'lucide-react'
+import {useState} from 'react'
 import { X } from 'lucide-react'
+import api from '../api/axios'
 const ChangePasswordModal = ({open, onClose}) => {
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState({type: "", text: ""})
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true)
+        setMessage({type: "", text: ""});
+        const formData = new FormData(e.currentTarget);
+        const currentPassword = formData.get("currentPassword")
+        const newPassword = formData.get("newPassword") 
+        try {
+            const { data } = await api.post("/auth/change-password",
+            {currentPassword, newPassword})
+            if(!data.success) throw new Error(data.error || "Failed")
+              setMessage({type: "success", text: "Password changed successfully"})
+              e.target.reset();
+        } catch (error) {
+            setMessage({type: "error", text: error.response?.data?.error || error.message});
+        } finally {
+            setLoading(false);
+        }
     }
 
     if(!open) return null;
@@ -66,6 +83,7 @@ return (
 
           <input
             type="password"
+            name="currentPassword"
             placeholder="Enter current password"
             className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
           />
@@ -79,6 +97,7 @@ return (
 
           <input
             type="password"
+            name="newPassword"
             placeholder="Enter new password"
             className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
           />
