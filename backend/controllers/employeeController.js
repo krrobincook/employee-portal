@@ -9,7 +9,7 @@ export const getEmployees = async (req, res) => {
     const { department } = req.query;
     const where = {};
     if (department) where.department = department;
-    const employees = (await Employee.find(where))
+    const employees = await Employee.find(where)
       .sort({ createdAt: -1 })
       .populate("userId", "email role")
       .lean();
@@ -116,6 +116,7 @@ export const updateEmployees = async (req, res) => {
       allowances: Number(allowances) || 0,
       deductions: Number(deductions) || 0,
       employmentStatus: employmentStatus || "ACTIVE",
+      isDeleted: employmentStatus === "ACTIVE" ? false : employee.isDeleted,
       bio: bio || "",
     });
 
