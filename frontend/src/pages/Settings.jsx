@@ -11,7 +11,7 @@ import api from "../api/axios";
 const Settings = () => {
   const {user} = useAuth()
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const fetchProfile = async () => {
     try {
@@ -22,7 +22,9 @@ const Settings = () => {
     } catch (error) {
       toast.error(error.response?.data?.error || error?.message)
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
   };
 

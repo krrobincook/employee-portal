@@ -1,8 +1,5 @@
-import React from "react";
 import { useCallback, useState, useEffect } from "react";
-import { dummyEmployeeData, dummyPayslipData } from "../assets/assets";
 import Loading from "../components/Loading";
-import { Plus } from "lucide-react";
 import PayslipList from "../components/payslip/PayslipList";
 import GeneratePaySlipForm from "../components/payslip/GeneratePaySlipForm";
 import { useAuth } from "../context/AuthContext";
@@ -18,25 +15,26 @@ const Payslips = () => {
   const fetchPayslips = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await api.get("/payslips")
-      setPayslips(res.data.data || [])
+      const [payslipRes, employeeRes] = await Promise.all([
+        api.get("/payslips"),
+        isAdmin ? api.get("/employees") : Promise.resolve(null),
+      ]);
+      setPayslips(payslipRes.data.data || []);
+      if (isAdmin && employeeRes) {
+        setEmployees(employeeRes.data.filter((e) => !e.isDeleted));
+      }
     } catch (error) {
-      toast.error(error.response?.data?.error || error?.message)
+      toast.error(error.response?.data?.error || error?.message);
     } finally {
       setTimeout(() => {
-        setLoading(false)
-      }, 500)
+        setLoading(false);
+      }, 500);
     }
-  }, []);
+  }, [isAdmin]);
 
   useEffect(() => {
     fetchPayslips();
   }, [fetchPayslips]);
-
-  useEffect(() => {
-    if(isAdmin) api.get("/employees").then((res)=> setEmployees(res.data.filter((e)=> !e.isDeleted)))
-    .catch((err)=> toast.error(err.response?.data?.error || err?.message))
-  }, [isAdmin]);
 
   if (loading) return <Loading title="Payslips" />;
 

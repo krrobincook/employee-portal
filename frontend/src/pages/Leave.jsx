@@ -28,7 +28,9 @@ const Leave = () => {
     } catch (error) {
       toast.error(error.response?.data?.error || error.message)
     }finally{
-      setLoading(false)
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
     }
   }, []);
 
