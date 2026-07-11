@@ -1,6 +1,8 @@
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
+import api from "../../api/axios";
 const GeneratePaySlipForm = ({ employees, onSuccess }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,6 +19,19 @@ const GeneratePaySlipForm = ({ employees, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    try {
+      await api.post("/payslips", data)
+      toast.success("Payslip generated successfully")
+      onSuccess()
+      setIsOpen(false)
+    } catch (error) {
+      toast.error(error.response?.data?.error || error.message)
+    } finally {
+      setLoading(false)
+    }
   };
 
   return (
@@ -48,14 +63,14 @@ const GeneratePaySlipForm = ({ employees, onSuccess }) => {
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {/* Employee */}
           <div>
             <label className="mb-2 block text-sm font-medium text-slate-700">
               Employee
             </label>
 
-            <select className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
+            <select name="employeeId" required className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
               <option>Select Employee</option>
 
               {employees.map((employee) => (
@@ -73,19 +88,19 @@ const GeneratePaySlipForm = ({ employees, onSuccess }) => {
                 Month
               </label>
 
-              <select className="w-full rounded-xl border border-slate-200 px-4 py-3">
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-                <option>May</option>
-                <option>June</option>
-                <option>July</option>
-                <option>August</option>
-                <option>September</option>
-                <option>October</option>
-                <option>November</option>
-                <option>December</option>
+              <select name="month" required className="w-full rounded-xl border border-slate-200 px-4 py-3">
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
               </select>
             </div>
 
@@ -96,6 +111,8 @@ const GeneratePaySlipForm = ({ employees, onSuccess }) => {
 
               <input
                 type="number"
+                name="year"
+                required
                 defaultValue={new Date().getFullYear()}
                 className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
               />
@@ -119,7 +136,7 @@ const GeneratePaySlipForm = ({ employees, onSuccess }) => {
               <label className='block text-sm font-medium text-slate-700 mb-2'>Allowance</label>
               <input
                 type="number"
-                name="allowance"
+                name="allowances"
                 placeholder="Enter allowance"
                 className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
               />

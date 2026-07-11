@@ -1,10 +1,13 @@
 import React, { useCallback } from "react";
 import { useEffect, useState } from "react";
-import { dummyEmployeeData, DEPARTMENTS } from "../assets/assets";
+import { DEPARTMENTS } from "../assets/assets";
 import Loading from "../components/Loading";
 import { Plus, Search, X } from "lucide-react";
 import EmployeeCard from "../components/EmployeeCard";
 import EmployeeForm from "../components/EmployeeForm";
+import toast from "react-hot-toast";
+import api from "../api/axios";
+
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,15 +17,17 @@ const Employees = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const fetchEmployees = useCallback(async () => {
-    setLoading(true);
-    setEmployees(
-      dummyEmployeeData.filter((emp) =>
-        selectedDept ? emp.department === selectedDept : emp,
-      ),
-    );
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    try {
+      const url = selectedDept ? `/employees?department=${selectedDept}` : `/employees`
+      const res = await api.get(url)
+      setEmployees(res.data)
+    } catch (error) {
+      toast.error(error.response?.data?.error || error?.message)
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+      }, 500)
+    }
   }, [selectedDept]);
 
   useEffect(() => {

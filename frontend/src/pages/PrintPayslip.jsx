@@ -4,6 +4,7 @@ import { dummyPayslipData } from "../assets/assets";
 import Loading from "../components/Loading";
 import { format } from "date-fns";
 import { Printer, X } from "lucide-react";
+import api from "../api/axios";
 const PrintPayslip = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,12 +12,16 @@ const PrintPayslip = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const slip = dummyPayslipData.find((item) => item._id === id);
-    setPayslip(slip);
-
-    setTimeout(() => {
+    api.get(`/payslips/${id}`)
+    .then((res) => {
+      setPayslip(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
       setLoading(false);
-    }, 500);
+    });
   }, [id]);
 
   const handlePrint = () => {

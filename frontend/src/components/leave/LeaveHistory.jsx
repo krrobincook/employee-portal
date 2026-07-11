@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import { CheckIcon, Loader2, X } from "lucide-react";
+import api from "../../api/axios";
+import toast from "react-hot-toast";
 
 const LeaveHistory = ({ leaves, isAdmin, onUpdate }) => {
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useState(null);
 
   const handleStatusUpdate = async (id, status) => {
-    setProcessing(true);
-
+    setProcessing(id);
     try {
-      if (onUpdate) {
-        await onUpdate(id, status);
-      }
+      await api.patch(`/leave/${id}`, {status})
+      toast.success("Leave status updated successfully")
+      onUpdate()
+    } catch (error) {
+      toast.error(error.response?.data?.error || error?.message)
     } finally {
-      setProcessing(false);
+      setProcessing(null)
     }
-  };
+  }
 
   const statusClasses = {
     APPROVED: "bg-emerald-100 text-emerald-700",

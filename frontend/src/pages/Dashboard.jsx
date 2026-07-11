@@ -1,18 +1,21 @@
-import { useDebugValue, useEffect, useState } from "react";
-import { dummyEmployeeDashboardData } from "../assets/assets";
+import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import EmployeeDashboard from "../components/EmployeeDashboard";
-import { dummyAdminDashboardData } from "../assets/assets";
 import AdminDashboard from "../components/AdminDashboard";
+import api from "../api/axios";
+import toast from "react-hot-toast";
 const Dashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setData(dummyAdminDashboardData);
+    api.get("/dashboard").then((res) => setData(res.data)).catch((err) =>
+    toast.error(err.response?.data?.error || err?.message))
+    .finally(() => 
     setTimeout(() => {
-      setLoading(false);
-    }, 500);
+      setLoading(false)
+    }, 500)
+    )
   }, []);
 
   if (loading) return <Loading title="Dashboard" />;

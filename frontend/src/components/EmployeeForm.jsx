@@ -1,10 +1,35 @@
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import api from "../api/axios";
 
 const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
+  const navigate = useNavigate()
   const isEditMode = !!initialData;
-
   const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    setLoading(true) 
+    const formData = new FormData(e.currentTarget);
+    if(isEditMode){
+      const pwd = formData.get("password") 
+      if(!pwd) formData.delete("password")
+    }
+
+    try{
+      const url = isEditMode ? `employees/${initialData.id}` : "/employees";
+      const method = isEditMode ? "put" : "post";
+
+      await api[method](url, formData);
+      onSuccess ? onSuccess() : navigate("/employees")
+    }catch(err){
+      toast.error(err.response?.data?.error || err.message);
+    }finally{
+      setLoading(false);
+    }
+  }
 
   const [formData, setFormData] = useState({
     firstName: initialData?.firstName || "",
@@ -36,18 +61,6 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    console.log(formData);
-
-    setTimeout(() => {
-      setLoading(false);
-      onSuccess?.();
-    }, 1000);
-  };
 
   const inputClass =
     "w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100";
@@ -361,7 +374,7 @@ const EmployeeForm = ({ initialData, onSuccess, onCancel }) => {
           disabled={loading}
           className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
         >
-          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+          {loading && <Loader2Icon className="h-4 w-4 animate-spin" />}
           {isEditMode ? "Update Employee" : "Create Employee"}
         </button>
       </div>
