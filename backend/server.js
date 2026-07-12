@@ -18,11 +18,9 @@ const PORT = process.env.PORT || 4000;
 //Middleware
 app.use(
   cors({
-    origin: [
-      "http://localhost:5174",
-      "https://employee-portal-ui.onrender.com",
-    ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: (origin, callback) => callback(null, true),
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
