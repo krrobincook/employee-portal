@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const isProduction = window.location.hostname !== 'localhost';
 const api = axios.create({
-    baseURL: (import.meta.env.VITE_BASE_URL || "http://localhost:4000") + "/api",
+    baseURL: isProduction 
+        ? "https://employee-portal-backend-fvjo.onrender.com/api" 
+        : "http://localhost:4000/api",
 })
 
 api.interceptors.request.use((config)=>{
